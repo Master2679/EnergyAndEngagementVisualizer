@@ -9,8 +9,10 @@ getcontext().prec = 50
 def get_user_input():
     print('Enter y-axis data points. One point per line. When done, type STOP.')
     y_points = []
-    while (line.upper() != 'STOP'):
+    while True:
         line = input()
+        if line.upper() != 'STOP':
+            break
         y_points.append(Decimal(line))
     
     # Generate x-axis data points (iterations)
