@@ -64,7 +64,8 @@ def main():
                 st.subheader(f"[{row['Time']}] - {row['Activity']}")
                 st.write(f"- Energy Level: {row['Energy']}\n- Engagement: {row['Engagement']}\n- Time Spent: {row['Elapsed']} hr(s)\n- Flow? {row['Flow']}")
                 if st.button(f"Delete Entry {index}"):
-                    delete_entry_by_index(index)
+                   st.session_state.data = st.session_state.data.drop(index)  
+                   st.session_state.data = st.session_state.data.reset_index(drop=True) #inspired by chatgpt
                 st.divider()
     
     # Complete log
