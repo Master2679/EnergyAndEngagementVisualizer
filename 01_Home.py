@@ -9,10 +9,15 @@ def main():
         page_title='Energy and Engagement Visualizer',
         layout='wide'
     )
-
+    def load_user_input_data():
+        try:
+            data = pd.read_csv('user_data.csv')
+        except FileNotFoundError:
+            data = pd.DataFrame(columns=['Date', 'Time', 'Activity', 'Energy', 'Engagement', 'Elapsed', 'Flow'])
+        return data
     # Instantiate dataframe
     if 'data' not in st.session_state:
-        st.session_state.data = pd.DataFrame(columns=['Date', 'Time', 'Activity', 'Energy', 'Engagement', 'Elapsed', 'Flow'])
+        st.session_state.data = load_user_input_data()
 
     # Main body
     st.title('Energy and Engagement Visualizer')
@@ -58,6 +63,8 @@ def main():
             for index, row in group.iterrows():
                 st.subheader(f"[{row['Time']}] - {row['Activity']}")
                 st.write(f"- Energy Level: {row['Energy']}\n- Engagement: {row['Engagement']}\n- Time Spent: {row['Elapsed']} hr(s)\n- Flow? {row['Flow']}")
+                if st.button(f"Delete Entry {index}"):
+                    delete_entry_by_index(index)
                 st.divider()
     
     # Complete log
@@ -65,6 +72,8 @@ def main():
     st.write('##')
     st.header("Complete dataframe", divider='gray')
     st.write(st.session_state.data)
+    if st.session_state.data is not None:
+        st.session_state.data.to_csv('user_data.csv', index=False)
 
 if __name__ == "__main__":
     main()
